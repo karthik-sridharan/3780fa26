@@ -1,0 +1,215 @@
+# Kernel methods - language identification demo
+# Character-trigram (3-spectrum) string kernel, cosine normalised.
+# Classifier: multiclass kernel logistic regression (one weight vector per language).
+#
+# Format: <language><TAB><phrase>, one phrase per line.
+# Text is lowercased and accents are stripped before the trigrams are counted,
+# so "cafe" and "cafe" with an accent give identical features.
+# Tamil is written in the Latin alphabet (informal romanisation).
+#
+# TRAINING SET - 160 phrases, 40 per language.
+
+English	the weather is nice today
+English	i would like a cup of coffee
+English	where is the train station
+English	she reads a book every night
+English	we are going to the market
+English	this is my favourite song
+English	the children play in the garden
+English	he works at a small company
+English	can you help me with this
+English	the food was really good
+English	they arrived late last night
+English	my brother lives in the city
+English	i have two sisters and one brother
+English	the meeting starts at nine
+English	please close the window
+English	we need more time for this
+English	the dog is sleeping on the floor
+English	she speaks three languages
+English	i do not understand the question
+English	the price is too high for me
+English	let us meet again tomorrow
+English	the film was much too long
+English	he bought a new car last week
+English	there is no milk in the fridge
+English	the library closes at six
+English	i am learning to play the guitar
+English	we walked along the river
+English	the teacher explained it again
+English	my keys are on the table
+English	it rained all day yesterday
+English	the bus was late this morning
+English	she wrote a letter to her friend
+English	we live near the old church
+English	the answer is written on the board
+English	i forgot to bring my notes
+English	the room is very cold tonight
+English	they sell fresh bread here
+English	the exam was harder than expected
+English	he called me twice this week
+English	we should leave before dark
+Spanish	el tiempo está muy bueno hoy
+Spanish	quisiera una taza de café
+Spanish	dónde está la estación de tren
+Spanish	ella lee un libro cada noche
+Spanish	vamos al mercado esta mañana
+Spanish	esta es mi canción favorita
+Spanish	los niños juegan en el jardín
+Spanish	él trabaja en una empresa pequeña
+Spanish	puedes ayudarme con esto
+Spanish	la comida estaba muy buena
+Spanish	llegaron tarde anoche
+Spanish	mi hermano vive en la ciudad
+Spanish	tengo dos hermanas y un hermano
+Spanish	la reunión empieza a las nueve
+Spanish	por favor cierra la ventana
+Spanish	necesitamos más tiempo para esto
+Spanish	el perro duerme en el suelo
+Spanish	ella habla tres idiomas
+Spanish	no entiendo la pregunta
+Spanish	el precio es demasiado alto para mí
+Spanish	quedamos otra vez mañana
+Spanish	la película era demasiado larga
+Spanish	compró un coche nuevo la semana pasada
+Spanish	no hay leche en la nevera
+Spanish	la biblioteca cierra a las seis
+Spanish	estoy aprendiendo a tocar la guitarra
+Spanish	caminamos por la orilla del río
+Spanish	el profesor lo explicó otra vez
+Spanish	mis llaves están sobre la mesa
+Spanish	llovió todo el día de ayer
+Spanish	el autobús llegó tarde esta mañana
+Spanish	escribió una carta a su amiga
+Spanish	vivimos cerca de la iglesia vieja
+Spanish	la respuesta está escrita en la pizarra
+Spanish	olvidé traer mis apuntes
+Spanish	la habitación está muy fría esta noche
+Spanish	aquí venden pan fresco
+Spanish	el examen fue más difícil de lo esperado
+Spanish	me llamó dos veces esta semana
+Spanish	deberíamos salir antes del anochecer
+French	il fait très beau aujourd'hui
+French	je voudrais une tasse de café
+French	où est la gare s'il vous plaît
+French	elle lit un livre chaque soir
+French	nous allons au marché ce matin
+French	c'est ma chanson préférée
+French	les enfants jouent dans le jardin
+French	il travaille dans une petite entreprise
+French	peux-tu m'aider avec cela
+French	le repas était vraiment bon
+French	ils sont arrivés tard hier soir
+French	mon frère habite en ville
+French	j'ai deux soeurs et un frère
+French	la réunion commence à neuf heures
+French	ferme la fenêtre s'il te plaît
+French	nous avons besoin de plus de temps
+French	le chien dort sur le sol
+French	elle parle trois langues
+French	je ne comprends pas la question
+French	le prix est trop élevé pour moi
+French	on se revoit demain
+French	le film était beaucoup trop long
+French	il a acheté une nouvelle voiture
+French	il n'y a plus de lait
+French	la bibliothèque ferme à six heures
+French	j'apprends à jouer de la guitare
+French	nous avons marché le long de la rivière
+French	le professeur l'a expliqué encore
+French	mes clés sont sur la table
+French	il a plu toute la journée hier
+French	le bus était en retard ce matin
+French	elle a écrit une lettre à son amie
+French	nous habitons près de la vieille église
+French	la réponse est écrite au tableau
+French	j'ai oublié d'apporter mes notes
+French	la chambre est très froide ce soir
+French	on vend du pain frais ici
+French	l'examen était plus difficile que prévu
+French	il m'a appelé deux fois cette semaine
+French	nous devrions partir avant la nuit
+Tamil	inniki vaanilai romba nalla irukku
+Tamil	enakku oru coffee venum
+Tamil	train station enga irukku
+Tamil	aval daily raathiri oru book padikkiraal
+Tamil	naanga inniki market ku porom
+Tamil	idhu en favourite paattu
+Tamil	kuzhandhaigal thottathula vilayaadranga
+Tamil	avan oru chinna company la velai seiraan
+Tamil	enakku konjam udhavi pannuvingala
+Tamil	saapadu romba nalla irundhuchu
+Tamil	avanga nethu raathiri late ah vandhaanga
+Tamil	en thambi chennai la irukkaan
+Tamil	enakku rendu akka oru thambi
+Tamil	meeting kaalaila onbadhu maniku aarambikkum
+Tamil	thayavu senju jannala moodunga
+Tamil	namakku innum konjam neram venum
+Tamil	naai tharaiyila thoongudhu
+Tamil	aval moonu bhashai pesuvaal
+Tamil	enakku kelvi puriyala
+Tamil	vilai romba adhigam irukku
+Tamil	naalaikku meendum santhippom
+Tamil	padam romba nedumaa irundhuchu
+Tamil	avan pudhu car vaanginaan
+Tamil	fridge la paal illai
+Tamil	library aaru maniku moodidum
+Tamil	naan guitar kathukittu irukken
+Tamil	naanga aathu orama nadandhom
+Tamil	vaathiyaar marubadiyum solli kuduthaaru
+Tamil	en saavi mesai mela irukku
+Tamil	nethu muzhusa mazhai peiyuchu
+Tamil	bus inniki kaalaila late ah vandhuchu
+Tamil	aval than thozhiku kadidham ezhudhinaal
+Tamil	naanga pazhaya kovil pakkathula irukkom
+Tamil	badhil board la ezhudhi irukku
+Tamil	naan en notes konduvara marandhutten
+Tamil	room inniki raathiri romba kulira irukku
+Tamil	inga fresh roti kedaikkum
+Tamil	exam naan nenacha vida kashtamaa irundhuchu
+Tamil	avan enna rendu thadava koopitaan
+Tamil	iruttradhukku munnadi kelambanum
+
+# EXTRA SHORT PHRASES - 40, 10 per language, not used for fitting.
+# Short everyday greetings and fragments, handy for testing the live demo.
+
+English	good morning
+English	thank you very much
+English	see you tomorrow
+English	how are you
+English	yes please
+English	no problem
+English	what time is it
+English	i am fine
+English	come here
+English	very good
+Spanish	buenos dias
+Spanish	muchas gracias
+Spanish	hasta manana
+Spanish	como estas
+Spanish	si por favor
+Spanish	no hay problema
+Spanish	que hora es
+Spanish	estoy bien
+Spanish	ven aqui
+Spanish	muy bueno
+French	bonjour
+French	merci beaucoup
+French	a demain
+French	comment ca va
+French	oui s'il te plait
+French	pas de probleme
+French	quelle heure est il
+French	je vais bien
+French	viens ici
+French	tres bien
+Tamil	vanakkam
+Tamil	romba nandri
+Tamil	naalaikku paarkalam
+Tamil	epdi irukeenga
+Tamil	seri seri
+Tamil	problem illai
+Tamil	mani enna
+Tamil	naan nalla irukken
+Tamil	inga vaanga
+Tamil	romba nalla irukku
