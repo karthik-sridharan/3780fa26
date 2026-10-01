@@ -1,0 +1,57 @@
+# Questions for the CS 3780/5780 Midterm Jeopardy board.
+#
+# How to edit:
+#   * A line starting with  CATEGORY:  begins a new column. Its text is the heading.
+#   * A line starting with  <points>)  begins a clue, e.g.   30) Why does ...
+#   * A line that is neither is appended to the clue above it, so you can wrap
+#     long questions over several lines.
+#   * Blank lines and lines starting with # are ignored.
+#   * HTML works: <em> <strong> <ol><li> <br> &mdash; etc.
+#   * LaTeX works: $...$ for inline maths, $$...$$ for a displayed equation.
+#     e.g.   $\lambda$    $\mathbf{w}^\top\mathbf{x}+b$    $$\min_w \|w\|^2$$
+#     Write LaTeX exactly as you normally would - nothing needs escaping.
+#
+# Columns appear left to right in the order listed; clues top to bottom.
+
+CATEGORY: Supervised Learning & Model Selection
+10) Name the ingredients of the supervised learning setup. What are $\mathcal{X}$, $\mathcal{Y}$, $D$, $\mathcal{H}$ and $\ell$?
+20) Why is your test error typically higher than your validation error?
+30) Why can you not choose $\lambda$ by minimizing the training error?
+40) Your training error is 2% and your test error is 25%. Name two <em>distinct</em> changes you could make, and say what each one is fixing.
+50) In the bound $\varepsilon(\hat h_{\hat\lambda})\le\min_{\lambda}\varepsilon(\hat h_{\lambda})+2\sqrt{\dfrac{\log(2k/\delta)}{2n_{\mathrm{val}}}}$, what happens to the slack if you quadruple the validation set? If you go from 10 settings to 10,000?
+
+CATEGORY: k-NN & Perceptron
+10) [T/F] $k$-NN is a generative classifier.
+20) What is the main assumption behind nearest-neighbor classification?
+30) What is the Perceptron update after a positive input point $\mathbf{x}$ is misclassified?
+40) [T/F] The Perceptron algorithm is guaranteed to stop only if the data is linearly separable. What quantity does its mistake bound depend on?
+50) Assume you have points in 2D within the unit circle and a hyperplane that dissects the circle. As you add dimensions with random feature values, how are the pairwise point distances affected? How are the distances to the hyperplane affected?
+
+CATEGORY: Linear Classifiers & Regression
+10) [T/F] Linear regression can be interpreted as a generative model.
+20) For $h(\mathbf{x})=\mathrm{sign}(\mathbf{w}^\top\mathbf{x}+b)$ in $d$ dimensions, what geometric object is the decision boundary? What is it when $d=1$?
+30) For each of the following, say whether the MLE solution can be written in closed form:<ol><li>Logistic regression</li><li>Least-squares regression</li></ol>
+40) Any $d$-dimensional linear classifier with a bias can be written as a <em>homogeneous</em> classifier in how many dimensions? Describe the transformation of $\mathbf{x}$ and of $\mathbf{w}$.
+50) When would you prefer each of the following methods for solving linear regression?<ol><li>Newton's method</li><li>Closed-form solution</li><li>Stochastic gradient descent</li><li>Gradient descent</li></ol>
+
+CATEGORY: SVM
+10) [T/F] Moving any single training point always changes the SVM decision boundary.
+20) What is the <em>margin</em> of a separating hyperplane, and what does the hard-margin SVM maximize?
+30) What is a support vector? What is special about the coefficient $\alpha_i$ of a point that is <em>not</em> a support vector?
+40) In the soft-margin SVM, what do the slack variables $\xi_i$ allow, and what does $C$ trade off?
+50) Write the SVM as a regularized ERM problem. Which loss function plays the role of $\ell$, and what is the regularizer?
+
+CATEGORY: Kernel Methods
+10) [T/F] To use a kernel you must be able to compute $\phi(x)$ explicitly.
+20) If $x$ is $d$-dimensional and $\phi(x)$ contains every monomial of degree at most $p$, roughly how many features is that?
+30) Why does the minimizer $\mathbf{w}$ of the regularized ERM objective lie in the span of $\phi(x_1),\dots,\phi(x_n)$, and what does that buy you?
+40) State the condition for a function $k$ to be a valid kernel. Give one way to show a given $k$ is valid <em>without</em> writing down $\phi$.
+50) Using only the construction rules, show that $k(x,x')=\exp\!\left(-\dfrac{(x-x')^2}{2\sigma^2}\right)$ is a valid kernel.
+
+CATEGORY: Gradient Descent
+10) [T/F] Newton's method always converges, but sometimes it is slower than gradient descent.
+20) Name two reasons one might prefer stochastic gradient descent to gradient descent or Newton's method.
+30) [T/F] Adagrad always converges faster than gradient descent.
+40) Name two distinct reasons why you might not be able to use Newton's method on a particular data set, independent of convergence.
+50) For each method below, mention one scenario where it will work well:<ol><li>Gradient descent</li><li>Newton's method</li><li>Gradient descent with momentum</li><li>Stochastic gradient descent</li><li>Adagrad</li></ol>
+

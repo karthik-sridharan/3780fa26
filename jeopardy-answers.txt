@@ -1,0 +1,59 @@
+# Answers for the CS 3780/5780 Midterm Jeopardy board.
+#
+# How to edit:
+#   * A line starting with  CATEGORY:  begins a new column. Its text is the heading.
+#   * A line starting with  <points>)  begins a clue, e.g.   30) Why does ...
+#   * A line that is neither is appended to the clue above it, so you can wrap
+#     long answers over several lines.
+#   * Blank lines and lines starting with # are ignored.
+#   * HTML works: <em> <strong> <ol><li> <br> &mdash; etc.
+#   * LaTeX works: $...$ for inline maths, $$...$$ for a displayed equation.
+#     e.g.   $\lambda$    $\mathbf{w}^\top\mathbf{x}+b$    $$\min_w \|w\|^2$$
+#     Write LaTeX exactly as you normally would - nothing needs escaping.
+#
+# Columns appear left to right in the order listed; clues top to bottom.
+
+# Category names and point values must match jeopardy-questions.txt.
+
+CATEGORY: Supervised Learning & Model Selection
+10) $\mathcal{X}$ is the feature space (inputs), $\mathcal{Y}$ the label space (outputs), $D=\{(x_1,y_1),\dots,(x_n,y_n)\}$ the training data drawn i.i.d. from $P$, $\mathcal{H}=\{h:\mathcal{X}\to\mathcal{Y}\}$ the model class, and $\ell:\mathcal{Y}\times\mathcal{Y}\to\mathbb{R}$ the loss. The learning algorithm picks an $h\in\mathcal{H}$ using $D$ and $\ell$.
+20) Because the validation set was <em>used to choose</em> the model &mdash; you picked the winner out of $k$ settings by its validation score, so that score is optimistically biased. The test set took part in no decision, so it is an unbiased estimate, and it usually comes out higher.
+30) Training error falls monotonically as $\lambda\to 0$ &mdash; less regularization never hurts the fit &mdash; so it is minimized at $\lambda=0$, i.e. no regularization at all. A quantity the model was fitted to cannot also referee it.
+40) This is overfitting. Two distinct fixes: <ol><li><strong>Reduce capacity / increase regularization</strong> (larger $\lambda$, smaller degree $p$, early stopping) &mdash; attacks the variance of the fit.</li><li><strong>Get more training data</strong>, or use cross-validation so the setting is chosen from a less noisy estimate.</li></ol> Also worth checking: train/test distribution mismatch, or leakage into the training set.
+50) $n_{\mathrm{val}}$ sits under a square root, so <strong>quadrupling the validation set halves the slack</strong>. $k$ sits inside a logarithm under that same root, so going from 10 to 10,000 settings multiplies the slack by only $\sqrt{\log(2\cdot 10^4/\delta)\,/\,\log(20/\delta)}\approx\sqrt{12.9/6.0}\approx 1.5$ &mdash; a $1000\times$ bigger search costs about 50% more slack.
+
+CATEGORY: k-NN & Perceptron
+10) <strong>False.</strong> $k$-NN is discriminative (in fact non-parametric): it never models $p(x\mid y)$ or $p(x,y)$, it just stores the data and votes among neighbors.
+20) That points close together in feature space tend to share labels &mdash; the labeling function is locally smooth with respect to the chosen metric. Everything hinges on that metric being meaningful.
+30) $\mathbf{w}\leftarrow\mathbf{w}+\mathbf{x}$ (and $b\leftarrow b+1$ if there is a bias). In general $\mathbf{w}\leftarrow\mathbf{w}+y\,\mathbf{x}$, which here has $y=+1$.
+40) <strong>True</strong> &mdash; on non-separable data the Perceptron never stops. The mistake bound is $(R/\gamma)^2$, where $\gamma$ is the margin of the best separator and $R=\max_i\|\mathbf{x}_i\|$. Note what is <em>absent</em>: it does not depend on $n$ or on $d$.
+50) Pairwise distances <strong>concentrate</strong> &mdash; every point becomes roughly equidistant from every other, so &lsquo;nearest&rsquo; stops meaning anything and $k$-NN degrades. The distance to the hyperplane is <strong>unaffected</strong>: it depends only on the component along $\mathbf{w}$, and the added random coordinates are orthogonal to it. This is exactly why linear classifiers survive high dimensions and $k$-NN does not.
+
+CATEGORY: Linear Classifiers & Regression
+10) <strong>True.</strong> Assume $y=\mathbf{w}^\top\mathbf{x}+\epsilon$ with $\epsilon\sim\mathcal{N}(0,\sigma^2)$; maximizing the likelihood of the data gives exactly the least-squares objective. It is a probabilistic model of the labels given $\mathbf{x}$.
+20) A <strong>hyperplane</strong> $\{\mathbf{x}:\mathbf{w}^\top\mathbf{x}+b=0\}$ &mdash; a $(d-1)$-dimensional affine subspace, orthogonal to $\mathbf{w}$, at distance $-b/\|\mathbf{w}\|$ from the origin. When $d=1$ it is a single <strong>point</strong>, $x=-b/w$.
+30) <ol><li><strong>Logistic regression: no.</strong> The likelihood has no closed-form maximizer; it needs an iterative method.</li><li><strong>Least squares: yes.</strong> $\mathbf{w}=(X^\top X)^{-1}X^\top \mathbf{y}$.</li></ol>
+40) <strong>$d+1$ dimensions.</strong> Append a constant feature: $\mathbf{x}'=(\mathbf{x},1)$ and $\mathbf{w}'=(\mathbf{w},b)$. Then $\mathbf{w}'^\top\mathbf{x}'=\mathbf{w}^\top\mathbf{x}+b$, so a homogeneous classifier in $\mathbb{R}^{d+1}$ represents any non-homogeneous one in $\mathbb{R}^{d}$.
+50) <ol><li><strong>Newton:</strong> small $d$, want very few iterations; for linear regression it lands in one step.</li><li><strong>Closed form:</strong> $d$ small enough to form and invert $X^\top X$ (cost $O(d^3)$), $n$ manageable.</li><li><strong>SGD:</strong> $n$ very large or streaming, where even one full gradient pass is too costly.</li><li><strong>GD:</strong> $d$ large, so forming or inverting the Hessian is out, but full gradients are affordable.</li></ol>
+
+CATEGORY: SVM
+10) <strong>False.</strong> Only the <em>support vectors</em> matter. A point strictly outside the margin has $\alpha_i=0$; move it (or delete it) and the solution is unchanged.
+20) The margin is the distance from the hyperplane to the closest training point, $\min_i y_i(\mathbf{w}^\top\mathbf{x}_i+b)/\|\mathbf{w}\|$. The hard-margin SVM <strong>maximizes</strong> it &mdash; equivalently, minimizes $\tfrac12\|\mathbf{w}\|^2$ subject to $y_i(\mathbf{w}^\top\mathbf{x}_i+b)\ge 1$ for all $i$.
+30) A support vector is a training point with $\alpha_i\neq 0$ &mdash; it sits on the margin (or violates it, in the soft-margin case). For a non-support vector $\alpha_i=0$, so it contributes nothing to $\mathbf{w}=\sum_i\alpha_i y_i\mathbf{x}_i$ and could be deleted without changing the answer.
+40) Each $\xi_i\ge 0$ lets point $i$ violate the margin ($\xi_i>0$) or be misclassified outright ($\xi_i>1$), so a solution exists even when the data is not separable. $C$ trades margin width against violations: large $C$ punishes violations hard (narrow margin, near hard-margin), small $C$ buys a wider margin by tolerating more violations. $C$ plays the role of $1/\lambda$.
+50) $$\min_{\mathbf{w},b}\ \frac1n\sum_{i=1}^{n}\max\{0,\,1-y_i(\mathbf{w}^\top\mathbf{x}_i+b)\}\;+\;\lambda\|\mathbf{w}\|^2$$ The loss is the <strong>hinge loss</strong>; the regularizer is the <strong>squared $L_2$ norm</strong> of $\mathbf{w}$. Relating the two parameterizations: $C=1/(2\lambda n)$.
+
+CATEGORY: Kernel Methods
+10) <strong>False</strong> &mdash; that is the whole point. You only ever need $k(x,x')=\phi(x)^\top\phi(x')$. The map $\phi$ may be enormous or infinite-dimensional and is never formed.
+20) $\binom{d+p}{p}=\frac{(d+p)!}{d!\,p!}$, which is $O(d^{\,p})$. For $p=2$ that is $\frac{(d+1)(d+2)}{2}$. This blow-up is the reason we never enumerate $\phi$.
+30) Gradient descent started at $\mathbf{w}_0=0$ only ever adds multiples of the $\phi(x_i)$, so every iterate &mdash; and therefore the limit &mdash; has the form $\mathbf{w}=\sum_{i=1}^{n}\alpha_i\phi(x_i)$. What it buys: predictions become $h(x)=\sum_{i=1}^{n}\alpha_i\,k(x_i,x)+b$, so you need only inner products, never $\phi$, and you optimize $n$ coefficients instead of $\dim(\phi)$ weights.
+40) $k$ must be <strong>symmetric</strong> and <strong>positive semi-definite</strong>: for <em>every</em> finite set $x_1,\dots,x_n$ the matrix $K_{ij}=k(x_i,x_j)$ has no negative eigenvalue. Without building $\phi$: assemble $k$ from known kernels using the construction rules &mdash; sums, positive scalings, products, exponentials, $f(x)k(x,x')f(x')$, and polynomials with positive coefficients.
+50) Expand the exponent: $-\frac{(x-x')^2}{2\sigma^2}=-\frac{x^2}{2\sigma^2}+\frac{x x'}{\sigma^2}-\frac{x'^2}{2\sigma^2}$. Then <ol><li>$k_1(x,x')=x x'$ &mdash; the plain inner product.</li><li>$k_2=\frac{1}{\sigma^2}k_1$ &mdash; scale by $c>0$.</li><li>$k_3=\exp(k_2)$ &mdash; exponentiate a kernel.</li><li>Take $f(x)=\exp\!\left(-\frac{x^2}{2\sigma^2}\right)$ and form $f(x)\,k_3(x,x')\,f(x')$.</li></ol> That product is exactly $\exp\!\left(-\frac{(x-x')^2}{2\sigma^2}\right)$, so it is a kernel.
+
+CATEGORY: Gradient Descent
+10) <strong>False.</strong> Newton's method is <em>not</em> guaranteed to converge &mdash; it can diverge, or head for a saddle or a maximum, if the Hessian is not positive definite or the start is poor. When it does converge near a minimum it is quadratically fast.
+20) Any two of: <ol><li>Each step costs one example (or a mini-batch) instead of all $n$, so it makes progress long before a single full gradient is computed.</li><li>No Hessian: Newton needs $O(d^2)$ memory and $O(d^3)$ per step.</li><li>It works on streaming data, where you never hold the full dataset.</li><li>The gradient noise can help escape saddle points and shallow local minima.</li></ol>
+30) <strong>False.</strong> AdaGrad adapts a per-coordinate step size and helps a lot when features are sparse or badly scaled, but it is not uniformly faster: it accumulates squared gradients forever, so the effective step size decays monotonically and can stall progress.
+40) Any two of: <ol><li>$d$ too large &mdash; the Hessian takes $O(d^2)$ memory and $O(d^3)$ to invert each step.</li><li>The Hessian may not exist &mdash; a non-twice-differentiable loss such as hinge or absolute loss.</li><li>The Hessian may be singular or not positive definite, so the Newton step is undefined or points the wrong way.</li></ol>
+50) <ol><li><strong>GD:</strong> smooth convex objective, moderate $d$, full batch affordable.</li><li><strong>Newton:</strong> small $d$, twice differentiable, want high accuracy in very few iterations.</li><li><strong>Momentum:</strong> ill-conditioned problems where plain GD zig-zags across a narrow valley.</li><li><strong>SGD:</strong> very large $n$ or streaming data.</li><li><strong>AdaGrad:</strong> sparse, high-dimensional features (text) where coordinates need very different step sizes.</li></ol>
+
